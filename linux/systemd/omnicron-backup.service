@@ -1,0 +1,10 @@
+[Unit]
+Description=Omnicron nightly appdata backup
+Requires=docker.service
+After=docker.service
+RequiresMountsFor=/srv
+
+[Service]
+Type=oneshot
+EnvironmentFile=-__REPO__/stack/.env
+ExecStart=__REPO__/linux/backup.sh

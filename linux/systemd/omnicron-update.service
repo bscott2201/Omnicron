@@ -1,0 +1,8 @@
+[Unit]
+Description=Omnicron container image updates
+Requires=docker.service
+After=docker.service omnicron-backup.service
+
+[Service]
+Type=oneshot
+ExecStart=__REPO__/linux/update.sh

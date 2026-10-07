@@ -1,0 +1,6 @@
+.env
+.env.*
+!stack/.env.example
+stack/.env
+*.iso
+*.bundle

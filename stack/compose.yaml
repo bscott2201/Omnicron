@@ -1,0 +1,34 @@
+# Omnicron stack (bare-metal Ubuntu).
+#   cd /opt/omnicron/stack && docker compose up -d
+name: omnicron
+
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      VERSION: docker
+      PLEX_CLAIM: ${PLEX_CLAIM:-}      # first boot only
+    volumes:
+      - ${APPDATA}/plex:/config
+      - ${MEDIA}:/media:ro
+    tmpfs:
+      - /transcode:size=8g             # RAM transcode scratch (Plex → Settings → Transcoder)
+    # Hardware transcoding (Plex Pass): uncomment once /dev/dri exists (see README "Intel iGPU")
+    # devices:
+    #   - /dev/dri:/dev/dri
+
+  homebridge:
+    image: homebridge/homebridge:latest
+    container_name: homebridge
+    network_mode: host                 # required for HomeKit mDNS
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - ${APPDATA}/homebridge:/homebridge
